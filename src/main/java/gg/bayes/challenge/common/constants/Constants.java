@@ -12,4 +12,9 @@ public class Constants {
 
 	public static final String ITEM_KEYWORD = "item_";
 
+	public static final int HOUR_EQ_SECONDS = 3600;
+
+	public static final int MINUTE_EQ_SECONDS = 60;
+
+	public static final int MILLISECOND_MULTIPLIER = 1000;
 }

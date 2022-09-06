@@ -104,17 +104,17 @@ public class MatchLogCommandServiceImpl implements MatchLogCommandService {
 
 	private void setBuySection(String item, CombatLogEntryEntity combatLogEntryEntity, MatchEntity matchedEntity,
 			Set<CombatLogEntryEntity> combatLogEntryEntitySet) {
-		final String regex = "\\w+?(?= buys)";
-		final String regex2 = "(?<= item )\\w+";
+		final String regexForBuyKeyword = "\\w+?(?= buys)";
+		final String regexForItemKeyword = "(?<= item )\\w+";
 
-		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-		final Matcher matcher = pattern.matcher(item);
+		final Pattern patternOfBuy = Pattern.compile(regexForBuyKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfBuy = patternOfBuy.matcher(item);
 
-		final Pattern pattern2 = Pattern.compile(regex2, Pattern.MULTILINE);
-		final Matcher matcher2 = pattern2.matcher(item);
+		final Pattern patternOfItem = Pattern.compile(regexForItemKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfItem = patternOfItem.matcher(item);
 
-		combatLogEntryEntity.setActor(matcher.find() ? matcher.group(0) : null);
-		combatLogEntryEntity.setItem(matcher2.find() ? matcher2.group(0) : null);
+		combatLogEntryEntity.setActor(matcherOfBuy.find() ? matcherOfBuy.group(0) : null);
+		combatLogEntryEntity.setItem(matcherOfItem.find() ? matcherOfItem.group(0) : null);
 		combatLogEntryEntity.setType(CombatLogEntryEntity.Type.ITEM_PURCHASED);
 		combatLogEntryEntity.setTimestamp(findTimeStamp(item));
 		combatLogEntryEntity.setMatch(matchedEntity);
@@ -123,22 +123,22 @@ public class MatchLogCommandServiceImpl implements MatchLogCommandService {
 
 	private void setCastSection(String item, CombatLogEntryEntity combatLogEntryEntity, MatchEntity matchedEntity,
 			Set<CombatLogEntryEntity> combatLogEntryEntitySet) {
-		final String regex = "\\w+?(?= casts ability)";
-		final String regex2 = "(?<= lvl )[1-9]";
-		final String regex3 = "(?<= ability )\\w+";
+		final String regexForCast = "\\w+?(?= casts ability)";
+		final String regexForLevel = "(?<= lvl )[1-9]";
+		final String regexForAbility = "(?<= ability )\\w+";
 
-		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-		final Matcher matcher = pattern.matcher(item);
+		final Pattern patternOfCast = Pattern.compile(regexForCast, Pattern.MULTILINE);
+		final Matcher matcherOfCast = patternOfCast.matcher(item);
 
-		final Pattern pattern2 = Pattern.compile(regex2, Pattern.MULTILINE);
-		final Matcher matcher2 = pattern2.matcher(item);
+		final Pattern patternOfLevel = Pattern.compile(regexForLevel, Pattern.MULTILINE);
+		final Matcher matcherOfLevel = patternOfLevel.matcher(item);
 
-		final Pattern pattern3 = Pattern.compile(regex3, Pattern.MULTILINE);
-		final Matcher matcher3 = pattern3.matcher(item);
+		final Pattern patternOfAbility = Pattern.compile(regexForAbility, Pattern.MULTILINE);
+		final Matcher matcherOfAbility = patternOfAbility.matcher(item);
 
-		combatLogEntryEntity.setActor(matcher.find() ? matcher.group(0) : null);
-		combatLogEntryEntity.setAbilityLevel(matcher2.find() ? Integer.parseInt(matcher2.group(0)) : null);
-		combatLogEntryEntity.setAbility(matcher3.find() ? matcher3.group(0) : null);
+		combatLogEntryEntity.setActor(matcherOfCast.find() ? matcherOfCast.group(0) : null);
+		combatLogEntryEntity.setAbilityLevel(matcherOfLevel.find() ? Integer.parseInt(matcherOfLevel.group(0)) : null);
+		combatLogEntryEntity.setAbility(matcherOfAbility.find() ? matcherOfAbility.group(0) : null);
 		combatLogEntryEntity.setType(CombatLogEntryEntity.Type.SPELL_CAST);
 		combatLogEntryEntity.setTimestamp(findTimeStamp(item));
 		combatLogEntryEntity.setMatch(matchedEntity);
@@ -147,27 +147,27 @@ public class MatchLogCommandServiceImpl implements MatchLogCommandService {
 
 	private void setHitSection(String item, CombatLogEntryEntity combatLogEntryEntity, MatchEntity matchedEntity,
 			Set<CombatLogEntryEntity> combatLogEntryEntitySet) {
-		final String regex = "\\w+?(?= hits)";
-		final String regex2 = "(?<= hits )\\w+";
-		final String regex3 = "(?<= with )\\w+";
-		final String regex4 = "(?<= for )[1-9]+";
+		final String regexForHitKeyword= "\\w+?(?= hits)";
+		final String regexForAfterHitKeyword = "(?<= hits )\\w+";
+		final String regexForWithKeyword = "(?<= with )\\w+";
+		final String regexForAfterKeyword = "(?<= for )[1-9]+";
 
-		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-		final Matcher matcher = pattern.matcher(item);
+		final Pattern patternOfHit = Pattern.compile(regexForHitKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfHit = patternOfHit.matcher(item);
 
-		final Pattern pattern2 = Pattern.compile(regex2, Pattern.MULTILINE);
-		final Matcher matcher2 = pattern2.matcher(item);
+		final Pattern patternOfAfterHit = Pattern.compile(regexForAfterHitKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfAfterHit = patternOfAfterHit.matcher(item);
 
-		final Pattern pattern3 = Pattern.compile(regex3, Pattern.MULTILINE);
-		final Matcher matcher3 = pattern3.matcher(item);
+		final Pattern patternOfWith = Pattern.compile(regexForWithKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfWith = patternOfWith.matcher(item);
 
-		final Pattern pattern4 = Pattern.compile(regex4, Pattern.MULTILINE);
-		final Matcher matcher4 = pattern4.matcher(item);
+		final Pattern patternOfAfterWith = Pattern.compile(regexForAfterKeyword, Pattern.MULTILINE);
+		final Matcher matcherOfAfterWith = patternOfAfterWith.matcher(item);
 
-		combatLogEntryEntity.setActor(matcher.find() ? matcher.group(0) : null);
-		combatLogEntryEntity.setTarget(matcher2.find() ? matcher2.group(0) : null);
-		combatLogEntryEntity.setAbility(matcher3.find() ? matcher3.group(0) : null);
-		combatLogEntryEntity.setDamage(matcher4.find() ? Integer.parseInt(matcher4.group(0)) : null);
+		combatLogEntryEntity.setActor(matcherOfHit.find() ? matcherOfHit.group(0) : null);
+		combatLogEntryEntity.setTarget(matcherOfAfterHit.find() ? matcherOfAfterHit.group(0) : null);
+		combatLogEntryEntity.setAbility(matcherOfWith.find() ? matcherOfWith.group(0) : null);
+		combatLogEntryEntity.setDamage(matcherOfAfterWith.find() ? Integer.parseInt(matcherOfAfterWith.group(0)) : null);
 		combatLogEntryEntity.setType(CombatLogEntryEntity.Type.DAMAGE_DONE);
 		combatLogEntryEntity.setTimestamp(findTimeStamp(item));
 		combatLogEntryEntity.setMatch(matchedEntity);
@@ -175,20 +175,22 @@ public class MatchLogCommandServiceImpl implements MatchLogCommandService {
 	}
 
 	private Long findTimeStamp(String item) {
-		final String regex = "\\d[0-9]+";
-		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-		final Matcher matcher = pattern.matcher(item);
+		final String regexForTimeValue = "\\d[0-9]+";
+		final Pattern patternOfTime = Pattern.compile(regexForTimeValue, Pattern.MULTILINE);
+		final Matcher matcherOfTime = patternOfTime.matcher(item);
 		int index = 0;
 		long result = 0;
-		while (matcher.find()) {
+
+		while (matcherOfTime.find()) {
 			if (index == 0) {
-				result += Long.parseLong(matcher.group(0)) * 3600 * 1000;
+				result += Long.parseLong(matcherOfTime.group(0)) * Constants.HOUR_EQ_SECONDS * Constants.MILLISECOND_MULTIPLIER;
 			} else if (index == 1) {
-				result += Long.parseLong(matcher.group(0)) * 60 * 1000;
+				result += Long.parseLong(matcherOfTime.group(0)) * Constants.MINUTE_EQ_SECONDS * Constants.MILLISECOND_MULTIPLIER;
 			} else if (index == 2) {
-				result += Long.parseLong(matcher.group(0)) * 1000;
+				result += Long.parseLong(matcherOfTime.group(0)) * Constants.MILLISECOND_MULTIPLIER;
 			} else if (index == 3) {
-				result += Long.parseLong(matcher.group(0));
+				result += Long.parseLong(matcherOfTime.group(0));
+				break;
 			}
 			index += 1;
 		}
